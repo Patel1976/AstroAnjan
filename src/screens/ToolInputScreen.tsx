@@ -29,7 +29,7 @@ export function ToolInputScreen({route, navigation}: Props) {
   };
   return <SafeAreaView edges={['top']} style={[styles.safe, {backgroundColor: colors.background}]}><ScrollView contentContainerStyle={styles.page} keyboardShouldPersistTaps="handled">
     <AppHeader title={tool.title} />
-    <View style={styles.introIcon}><AppText style={styles.symbol} tone="accent">{tool.symbol}</AppText></View>
+    <View style={[styles.introIcon, {backgroundColor: colors.warmSoft}]}><AppText style={styles.symbol} tone="accent">{tool.symbol}</AppText></View>
     <AppText style={styles.heading} weight="bold">Personalize your reading</AppText>
     <AppText tone="muted" style={styles.subtitle}>This local demo uses sample guidance and does not calculate an actual chart.</AppText>
     <AppText style={styles.label} weight="bold">{tool.id === 'compatibility' ? 'Your name' : 'Name'}</AppText><AppInput value={name} onChangeText={setName} placeholder="Enter a name" />
@@ -43,4 +43,4 @@ export function ToolInputScreen({route, navigation}: Props) {
     {busy ? <ActivityIndicator color={colors.accent} style={styles.loader} /> : <AppButton title="Generate demo reading" onPress={create} />}
   </ScrollView></SafeAreaView>;
 }
-const styles = StyleSheet.create({safe: {flex: 1}, page: {padding: 20, paddingBottom: 34}, introIcon: {width: 54, height: 54, borderRadius: 18, alignItems: 'center', justifyContent: 'center', backgroundColor: '#F7EEDD', marginTop: 4}, symbol: {fontSize: 26}, heading: {fontSize: 23, marginTop: 18}, subtitle: {lineHeight: 21, marginTop: 7}, label: {marginTop: 18, marginBottom: 7}, note: {marginTop: 20, marginBottom: 18}, noteText: {fontSize: 12, lineHeight: 19}, loader: {marginVertical: 18}});
+const styles = StyleSheet.create({safe: {flex: 1}, page: {padding: 20, paddingBottom: 34}, introIcon: {width: 54, height: 54, borderRadius: 18, alignItems: 'center', justifyContent: 'center', marginTop: 4}, symbol: {fontSize: 26}, heading: {fontSize: 23, marginTop: 18}, subtitle: {lineHeight: 21, marginTop: 7}, label: {marginTop: 18, marginBottom: 7}, note: {marginTop: 20, marginBottom: 18}, noteText: {fontSize: 12, lineHeight: 19}, loader: {marginVertical: 18}});

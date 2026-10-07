@@ -23,9 +23,9 @@ export function ToolsScreen() {
     <AppText style={styles.heading} weight="bold">Explore your cosmic toolkit</AppText>
     <AppText style={styles.subtitle} tone="muted">Thoughtful readings for every part of your journey.</AppText>
     <AppInput value={query} onChangeText={setQuery} placeholder="Search astrology tools" style={styles.search} />
-    <ScrollView horizontal showsHorizontalScrollIndicator={false} contentContainerStyle={styles.chips}>{categories.map(item => <AppText key={item} onPress={() => setCategory(item)} style={[styles.chip, {backgroundColor: category === item ? colors.primary : colors.surface, color: category === item ? '#FFFFFF' : colors.muted}]}>{item}</AppText>)}</ScrollView>
+    <ScrollView horizontal showsHorizontalScrollIndicator={false} contentContainerStyle={styles.chips}>{categories.map(item => <AppText key={item} onPress={() => setCategory(item)} style={[styles.chip, {backgroundColor: category === item ? colors.primary : colors.surface, color: category === item ? colors.onPrimary : colors.muted}]}>{item}</AppText>)}</ScrollView>
     <View style={styles.grid}>{tools.map((tool, index) => <AppCard key={tool.id} onPress={() => navigation.navigate('ToolInput', {toolId: tool.id})} style={styles.tool}>
-      <View style={[styles.icon, {backgroundColor: index % 2 ? colors.soft : '#F7EEDD'}]}><AppText style={styles.symbol} tone="accent">{tool.symbol}</AppText></View>
+      <View style={[styles.icon, {backgroundColor: index % 2 ? colors.soft : colors.warmSoft}]}><AppText style={styles.symbol} tone="accent">{tool.symbol}</AppText></View>
       <AppText weight="bold">{tool.title}</AppText><AppText tone="muted" style={styles.description}>{tool.subtitle}</AppText>
     </AppCard>)}</View>
     {tools.length === 0 ? <AppText tone="muted" style={styles.empty}>No tools match your search.</AppText> : null}

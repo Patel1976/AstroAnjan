@@ -15,7 +15,7 @@ export function LiveSessionsScreen() {
   return <SafeAreaView edges={['top']} style={[styles.safe, {backgroundColor: colors.background}]}><ScrollView contentContainerStyle={styles.page}>
     <AppHeader title="Live sessions" /><AppText style={styles.heading} weight="bold">Learn together, live</AppText><AppText tone="muted" style={styles.subtitle}>Join a guided session or save a place for an upcoming event.</AppText>
     {sessions.map(session => <AppCard key={session.id} style={styles.card} onPress={() => navigation.navigate('LiveSessionDetails', {sessionId: session.id})}>
-      <View style={[styles.poster, {backgroundColor: session.isLive ? '#34213F' : colors.soft}]}><AppText style={styles.posterIcon} tone={session.isLive ? 'accent' : 'primary'}>✧</AppText><AppText style={[styles.liveBadge, {color: session.isLive ? '#FFFFFF' : colors.muted}]}>{session.isLive ? '● LIVE NOW' : 'UPCOMING'}</AppText></View>
+      <View style={[styles.poster, {backgroundColor: session.isLive ? colors.cosmic : colors.soft}]}><AppText style={styles.posterIcon} tone={session.isLive ? 'accent' : 'primary'}>✧</AppText><AppText style={[styles.liveBadge, {color: session.isLive ? colors.onCosmic : colors.muted}]}>{session.isLive ? '● LIVE NOW' : 'UPCOMING'}</AppText></View>
       <AppText style={styles.title} weight="bold">{session.title}</AppText><AppText tone="muted" style={styles.description}>{session.description}</AppText>
       <View style={styles.host}><Avatar name={session.astrologerName} size={34} /><AppText style={styles.hostName}>{session.astrologerName}</AppText><AppText tone="muted" style={styles.viewers}>{session.isLive ? session.viewers + ' watching' : new Date(session.startsAt).toLocaleString()}</AppText></View>
     </AppCard>)}

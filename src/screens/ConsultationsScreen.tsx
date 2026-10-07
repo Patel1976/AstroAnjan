@@ -10,17 +10,17 @@ import {ConsultationStatus} from '../types';
 import {useThemeStore} from '../store/theme/themeStore';
 import {darkColors, lightColors} from '../theme';
 const filters = ['all', 'pending', 'accepted', 'active', 'completed', 'cancelled'] as const;
-const statusColors: Record<ConsultationStatus, string> = {pending: '#C58A43', accepted: '#4D89A2', active: '#38876A', completed: '#6D6480', cancelled: '#A26767'};
 export function ConsultationsScreen() {
   const navigation = useNavigation<NativeStackNavigationProp<MainStackParamList>>();
   const consultations = useConsultationStore(state => state.consultations);
   const [filter, setFilter] = useState<(typeof filters)[number]>('all');
   const dark = useThemeStore(state => state.mode === 'dark'); const colors = dark ? darkColors : lightColors;
+  const statusColors: Record<ConsultationStatus, string> = {pending: colors.statusPending, accepted: colors.statusAccepted, active: colors.statusActive, completed: colors.statusCompleted, cancelled: colors.statusCancelled};
   const list = useMemo(() => consultations.filter(item => filter === 'all' || item.status === filter), [consultations, filter]);
   return <SafeAreaView edges={['top']} style={[styles.safe, {backgroundColor: colors.background}]}><ScrollView contentContainerStyle={styles.page}>
     <AppHeader title="Consultations" />
     <AppText style={styles.heading} weight="bold">Your sessions</AppText><AppText tone="muted" style={styles.subtitle}>Requests, chats and past guidance in one place.</AppText>
-    <ScrollView horizontal showsHorizontalScrollIndicator={false} contentContainerStyle={styles.filters}>{filters.map(item => <AppText key={item} onPress={() => setFilter(item)} style={[styles.filter, {backgroundColor: filter === item ? colors.primary : colors.surface, color: filter === item ? '#FFFFFF' : colors.muted}]}>{item[0].toUpperCase() + item.slice(1)}</AppText>)}</ScrollView>
+    <ScrollView horizontal showsHorizontalScrollIndicator={false} contentContainerStyle={styles.filters}>{filters.map(item => <AppText key={item} onPress={() => setFilter(item)} style={[styles.filter, {backgroundColor: filter === item ? colors.primary : colors.surface, color: filter === item ? colors.onPrimary : colors.muted}]}>{item[0].toUpperCase() + item.slice(1)}</AppText>)}</ScrollView>
     {list.map(item => <AppCard key={item.id} style={styles.card} onPress={() => navigation.navigate('ConsultationDetails', {consultationId: item.id})}>
       <View style={styles.row}><Avatar name={item.astrologerName} size={50} /><View style={styles.info}><AppText weight="bold">{item.astrologerName}</AppText><AppText tone="muted" style={styles.specialty}>{item.specialty} · {item.mode}</AppText><AppText tone="muted" style={styles.date}>{new Date(item.createdAt).toLocaleDateString()}</AppText></View><AppText style={[styles.status, {color: statusColors[item.status], backgroundColor: colors.soft}]}>{item.status.toUpperCase()}</AppText></View>
       <View style={[styles.bottom, {borderColor: colors.border}]}><AppText tone="muted" style={styles.rate}>₹{item.pricePerMinute}/min</AppText><AppText tone="accent" weight="bold">View details  ›</AppText></View>

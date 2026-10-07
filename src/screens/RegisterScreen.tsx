@@ -9,13 +9,17 @@ export function RegisterScreen() {
   const [name, setName] = useState(''); const [email, setEmail] = useState('');
   const [phone, setPhone] = useState(''); const [password, setPassword] = useState('');
   const register = useAuthStore(state => state.register);
+  const [busy, setBusy] = useState(false);
   const dark = useThemeStore(state => state.mode === 'dark'); const colors = dark ? darkColors : lightColors;
   const submit = () => {
     if (!name.trim() || !email.includes('@') || password.length < 6) {
       Alert.alert('Check your details', 'Enter your name, a valid email, and a password with at least 6 characters.');
       return;
     }
-    register(name, email, phone, password, true);
+    setBusy(true);
+    register(name, email, phone, password, true).catch(error => {
+      Alert.alert('Could not create account', error instanceof Error ? error.message : 'Please try again.');
+    }).finally(() => setBusy(false));
   };
   return <SafeAreaView edges={['top']} style={[styles.safe, {backgroundColor: colors.background}]}><KeyboardAvoidingView style={styles.safe} behavior={Platform.OS === 'ios' ? 'padding' : undefined}><ScrollView contentContainerStyle={styles.page} keyboardShouldPersistTaps="handled">
     <AppHeader title="Create account" />
@@ -24,7 +28,7 @@ export function RegisterScreen() {
     <AppText style={styles.label} weight="bold">Email address</AppText><AppInput value={email} onChangeText={setEmail} placeholder="you@example.com" autoCapitalize="none" keyboardType="email-address" />
     <AppText style={styles.label} weight="bold">Phone (optional)</AppText><AppInput value={phone} onChangeText={setPhone} placeholder="+91" keyboardType="phone-pad" />
     <AppText style={styles.label} weight="bold">Password</AppText><AppInput value={password} onChangeText={setPassword} placeholder="At least 6 characters" secureTextEntry />
-    <View style={styles.button}><AppButton title="Create account" onPress={submit} /></View>
+    <View style={styles.button}><AppButton title={busy ? 'Creating account…' : 'Create account'} onPress={submit} disabled={busy} /></View>
     <AppText tone="muted" style={styles.legal}>Demo account only. Your details stay on this device.</AppText>
   </ScrollView></KeyboardAvoidingView></SafeAreaView>;
 }
