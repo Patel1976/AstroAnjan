@@ -2,19 +2,21 @@ import React, {useState} from 'react';
 import {Alert, ScrollView, StyleSheet, View} from 'react-native';
 import {NativeStackScreenProps} from '@react-navigation/native-stack';
 import {SafeAreaView} from 'react-native-safe-area-context';
-import {AppButton, AppCard, AppHeader, AppText, EmptyState} from '../components';
+import {AppButton, AppCard, AppHeader, AppText, EmptyState, ErrorState, LoadingState} from '../components';
 import {MainStackParamList} from '../navigation/types';
 import {useAstrologyStore} from '../store/astrology/astrologyStore';
 import {useProfileStore} from '../store/profile/profileStore';
 import {useThemeStore} from '../store/theme/themeStore';
 import {darkColors, lightColors} from '../theme';
 type Props = NativeStackScreenProps<MainStackParamList, 'AstrologyResult'>;
-export function AstrologyResultScreen({route}: Props) {
+export function AstrologyResultScreen({route, navigation}: Props) {
   const result = useAstrologyStore(state => state.results[route.params.toolId]);
+  const status = useAstrologyStore(state => state.status);
+  const error = useAstrologyStore(state => state.error);
   const profile = useProfileStore(state => state.profile);
   const [tab, setTab] = useState('Overview');
   const dark = useThemeStore(state => state.mode === 'dark'); const colors = dark ? darkColors : lightColors;
-  if (!result) return <SafeAreaView edges={['top']} style={[styles.safe, {backgroundColor: colors.background}]}><AppHeader title="Reading" /><EmptyState title="No reading yet" message="Generate a demo reading to see your result here." /></SafeAreaView>;
+  if (!result) return <SafeAreaView edges={['top']} style={[styles.safe, {backgroundColor: colors.background}]}><AppHeader title="Reading" />{status === 'loading' ? <LoadingState message="Preparing your demo reading…" /> : status === 'error' ? <ErrorState message={error ?? 'Try generating the reading again.'} onRetry={() => navigation.navigate('ToolInput', {toolId: route.params.toolId})} /> : <EmptyState title="No reading yet" message="Generate a demo reading to see your result here." />}</SafeAreaView>;
   const kundli = route.params.toolId === 'kundli';
   const sections = kundli ? (tab === 'Planets' ? [{title: 'Sun', body: 'Leo · 10th house · confident expression'}, {title: 'Moon', body: 'Taurus · 7th house · steady emotions'}, {title: 'Mercury', body: 'Virgo · 11th house · thoughtful communication'}] : tab === 'Houses' ? [{title: '1st house', body: 'Identity, approach, and first impressions.'}, {title: '7th house', body: 'Partnership, collaboration, and balance.'}, {title: '10th house', body: 'Career direction and public contribution.'}] : result.sections) : result.sections;
   return <SafeAreaView edges={['top']} style={[styles.safe, {backgroundColor: colors.background}]}><ScrollView contentContainerStyle={styles.page}>

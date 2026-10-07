@@ -7,3 +7,5 @@ export * from './Avatar';
 export * from './RatingStars';
 export * from './EmptyState';
 export * from './MessageBubble';
+export * from './LoadingState';
+export * from './ErrorState';
