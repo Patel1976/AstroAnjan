@@ -2,7 +2,7 @@ import React, {useState} from 'react';
 import {Alert, ScrollView, StyleSheet, View} from 'react-native';
 import {launchImageLibrary} from 'react-native-image-picker';
 import {SafeAreaView} from 'react-native-safe-area-context';
-import {AppButton, AppHeader, AppInput, AppText, Avatar} from '../components';
+import {AppButton, AppCard, AppHeader, AppInput, AppText, Avatar} from '../components';
 import {useProfileStore} from '../store/profile/profileStore';
 import {useThemeStore} from '../store/theme/themeStore';
 import {darkColors, lightColors} from '../theme';
@@ -31,7 +31,16 @@ export function EditProfileScreen() {
   };
   return <SafeAreaView edges={['top']} style={[styles.safe, {backgroundColor: colors.background}]}><ScrollView contentContainerStyle={styles.page}>
     <AppHeader title="Edit profile" />
-    <View style={styles.photo}><Avatar name={name || 'A'} uri={profile.imageUri} size={88} /><View style={styles.photoActions}><AppText tone="accent" weight="bold" onPress={choosePhoto}>Choose photo</AppText>{profile.imageUri ? <AppText style={styles.remove} tone="muted" onPress={removeImage}>Remove photo</AppText> : null}</View></View>
+    <AppCard style={styles.photoCard}>
+      <Avatar name={name || 'A'} uri={profile.imageUri} size={72} />
+      <View style={styles.photoInfo}>
+        <AppText weight="bold" style={styles.photoName}>{name || 'Your name'}</AppText>
+        <View style={styles.photoActions}>
+          <AppText tone="accent" weight="bold" onPress={choosePhoto}>Choose photo</AppText>
+          {profile.imageUri ? <AppText style={styles.remove} tone="muted" onPress={removeImage}>Remove</AppText> : null}
+        </View>
+      </View>
+    </AppCard>
     <AppText style={styles.label} weight="bold">Full name</AppText><AppInput value={name} onChangeText={setName} placeholder="Your name" />
     <AppText style={styles.label} weight="bold">Email</AppText><AppInput value={email} onChangeText={setEmail} autoCapitalize="none" keyboardType="email-address" placeholder="you@example.com" />
     <AppText style={styles.label} weight="bold">Phone</AppText><AppInput value={phone} onChangeText={setPhone} keyboardType="phone-pad" placeholder="Phone number" />
@@ -39,4 +48,4 @@ export function EditProfileScreen() {
     <View style={styles.button}><AppButton title="Save changes" onPress={save} /></View>
   </ScrollView></SafeAreaView>;
 }
-const styles = StyleSheet.create({safe: {flex: 1}, page: {padding: 20, paddingBottom: 36}, photo: {flexDirection: 'row', alignItems: 'center', marginVertical: 14}, photoActions: {marginLeft: 18, gap: 8}, remove: {fontSize: 13}, label: {marginTop: 18, marginBottom: 8}, genders: {flexDirection: 'row', gap: 10}, gender: {paddingVertical: 12, paddingHorizontal: 18, overflow: 'hidden', borderRadius: 14}, button: {marginTop: 28}});
+const styles = StyleSheet.create({safe: {flex: 1}, page: {paddingHorizontal: 20, paddingTop: 12, paddingBottom: 36, width: '100%', maxWidth: 760, alignSelf: 'center'}, photoCard: {flexDirection: 'row', alignItems: 'center', gap: 16, padding: 16, marginBottom: 4}, photoInfo: {flex: 1}, photoName: {fontSize: 17}, photoActions: {flexDirection: 'row', gap: 14, marginTop: 8}, remove: {fontSize: 13}, label: {marginTop: 18, marginBottom: 8}, genders: {flexDirection: 'row', gap: 10}, gender: {paddingVertical: 12, paddingHorizontal: 18, overflow: 'hidden', borderRadius: 14}, button: {marginTop: 28}});

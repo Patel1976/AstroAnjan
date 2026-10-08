@@ -9,3 +9,5 @@ export * from './EmptyState';
 export * from './MessageBubble';
 export * from './LoadingState';
 export * from './ErrorState';
+export * from './SearchBar';
+export * from './StatusBadge';

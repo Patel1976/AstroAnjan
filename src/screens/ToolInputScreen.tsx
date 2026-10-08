@@ -29,9 +29,13 @@ export function ToolInputScreen({route, navigation}: Props) {
   };
   return <SafeAreaView edges={['top']} style={[styles.safe, {backgroundColor: colors.background}]}><ScrollView contentContainerStyle={styles.page} keyboardShouldPersistTaps="handled">
     <AppHeader title={tool.title} />
-    <View style={[styles.introIcon, {backgroundColor: colors.warmSoft}]}><AppText style={styles.symbol} tone="accent">{tool.symbol}</AppText></View>
-    <AppText style={styles.heading} weight="bold">Personalize your reading</AppText>
-    <AppText tone="muted" style={styles.subtitle}>This local demo uses sample guidance and does not calculate an actual chart.</AppText>
+    <View style={[styles.introCard, {backgroundColor: colors.surfaceElevated, borderColor: colors.border, borderWidth: StyleSheet.hairlineWidth, borderRadius: 20}]}>
+      <View style={[styles.introIcon, {backgroundColor: colors.warmSoft}]}><AppText style={styles.symbol} tone="accent">{tool.symbol}</AppText></View>
+      <View style={styles.introText}>
+        <AppText variant="screenTitle" style={styles.heading} weight="bold">Personalize your reading</AppText>
+        <AppText tone="muted" style={styles.subtitle}>This local demo uses sample guidance and does not calculate an actual chart.</AppText>
+      </View>
+    </View>
     <AppText style={styles.label} weight="bold">{tool.id === 'compatibility' ? 'Your name' : 'Name'}</AppText><AppInput value={name} onChangeText={setName} placeholder="Enter a name" />
     {usesBirth ? <>
       <AppText style={styles.label} weight="bold">Date of birth</AppText><AppInput value={date} onChangeText={setDate} placeholder="YYYY-MM-DD" />
@@ -43,4 +47,4 @@ export function ToolInputScreen({route, navigation}: Props) {
     {busy ? <ActivityIndicator color={colors.accent} style={styles.loader} /> : <AppButton title="Generate demo reading" onPress={create} />}
   </ScrollView></SafeAreaView>;
 }
-const styles = StyleSheet.create({safe: {flex: 1}, page: {padding: 20, paddingBottom: 34}, introIcon: {width: 54, height: 54, borderRadius: 18, alignItems: 'center', justifyContent: 'center', marginTop: 4}, symbol: {fontSize: 26}, heading: {fontSize: 23, marginTop: 18}, subtitle: {lineHeight: 21, marginTop: 7}, label: {marginTop: 18, marginBottom: 7}, note: {marginTop: 20, marginBottom: 18}, noteText: {fontSize: 12, lineHeight: 19}, loader: {marginVertical: 18}});
+const styles = StyleSheet.create({safe: {flex: 1}, page: {paddingHorizontal: 20, paddingTop: 12, paddingBottom: 34, width: '100%', maxWidth: 760, alignSelf: 'center'}, introCard: {flexDirection: 'row', alignItems: 'center', gap: 14, padding: 16, marginBottom: 8}, introIcon: {width: 54, height: 54, borderRadius: 18, alignItems: 'center', justifyContent: 'center', flexShrink: 0}, symbol: {fontSize: 26}, introText: {flex: 1}, heading: {fontSize: 20}, subtitle: {lineHeight: 20, marginTop: 5, fontSize: 12}, label: {marginTop: 18, marginBottom: 7}, note: {marginTop: 20, marginBottom: 18}, noteText: {fontSize: 12, lineHeight: 19}, loader: {marginVertical: 18}});

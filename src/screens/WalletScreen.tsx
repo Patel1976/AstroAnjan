@@ -16,13 +16,27 @@ export function WalletScreen() {
   return <SafeAreaView edges={['top']} style={[styles.safe, {backgroundColor: colors.background}]}><ScrollView contentContainerStyle={styles.page}>
     <AppHeader title="My wallet" />
     <AppCard style={[styles.balance, {backgroundColor: colors.cosmic, borderColor: colors.cosmic}]}><AppText tone="muted">AVAILABLE BALANCE</AppText><AppText style={[styles.amount, {color: colors.onCosmic}]} weight="bold">₹{balance.toLocaleString('en-IN')}</AppText><AppText tone="muted" style={[styles.caption, {color: colors.cosmicMuted}]}>Use your balance for demo consultations</AppText></AppCard>
-    <AppText style={styles.heading} weight="bold">Add money</AppText><AppText tone="muted" style={styles.subtitle}>Choose an amount to create a payment order.</AppText>
+    <AppText variant="screenTitle" style={styles.heading} weight="bold">Add money</AppText><AppText tone="muted" style={styles.subtitle}>Choose an amount to create a payment order.</AppText>
     <View style={styles.presets}>{presets.map(value => <AppText key={value} onPress={() => setAmount(value)} style={[styles.preset, {borderColor: amount === value ? colors.primary : colors.border, color: amount === value ? colors.primary : colors.text, backgroundColor: amount === value ? colors.soft : colors.surface}]}>₹{value}</AppText>)}</View>
     <AppText tone="muted" style={styles.disclaimer}>Demo only. No payment gateway is connected and the balance will not change.</AppText>
     <AppButton title={'Create ₹' + amount + ' order'} onPress={order} />
-    <AppText style={styles.heading} weight="bold">Transactions</AppText>
-    {transactions.map(item => <AppCard key={item.id} style={styles.transaction}><View style={[styles.transIcon, {backgroundColor: colors.soft}]}><AppText tone="accent">{item.type === 'credit' ? '+' : '−'}</AppText></View><View style={styles.transInfo}><AppText weight="bold">{item.description}</AppText><AppText tone="muted" style={styles.transDate}>{new Date(item.createdAt).toLocaleDateString()} · {item.status}</AppText></View><AppText style={styles.transAmount} tone={item.type === 'credit' ? 'accent' : 'primary'} weight="bold">{item.type === 'credit' ? '+' : '-'}₹{item.amount}</AppText></AppCard>)}
+    <AppText variant="screenTitle" style={styles.heading} weight="bold">Transactions</AppText>
+    {transactions.map(item => <AppCard key={item.id} style={styles.transaction}>
+      <View style={[styles.transIcon, {backgroundColor: item.type === 'credit' ? colors.soft : colors.warmSoft}]}>
+        <AppText style={[styles.transSign, {color: item.type === 'credit' ? colors.success : colors.accent}]} weight="bold">{item.type === 'credit' ? '+' : '−'}</AppText>
+      </View>
+      <View style={styles.transInfo}>
+        <AppText weight="bold">{item.description}</AppText>
+        <View style={styles.transMeta}>
+          <View style={[styles.statusPill, {backgroundColor: colors.soft, borderColor: colors.border}]}>
+            <AppText style={[styles.statusText, {color: colors.primary}]} weight="bold">{item.status.toUpperCase()}</AppText>
+          </View>
+          <AppText tone="muted" style={styles.transDate}>{new Date(item.createdAt).toLocaleDateString()}</AppText>
+        </View>
+      </View>
+      <AppText style={[styles.transAmount, {color: item.type === 'credit' ? colors.success : colors.accent}]} weight="bold">{item.type === 'credit' ? '+' : '-'}₹{item.amount}</AppText>
+    </AppCard>)}
     {transactions.length === 0 ? <EmptyState title="No transactions yet" message="Your wallet activity will appear here." /> : null}
   </ScrollView></SafeAreaView>;
 }
-const styles = StyleSheet.create({safe: {flex: 1}, page: {padding: 20, paddingBottom: 32}, balance: {padding: 22}, amount: {fontSize: 35, marginTop: 8}, caption: {marginTop: 6}, heading: {fontSize: 19, marginTop: 25}, subtitle: {fontSize: 13, marginTop: 4}, presets: {flexDirection: 'row', flexWrap: 'wrap', gap: 10, marginTop: 15}, preset: {width: '47%', paddingVertical: 15, textAlign: 'center', overflow: 'hidden', borderRadius: 14, borderWidth: 1, fontWeight: '700'}, disclaimer: {fontSize: 12, lineHeight: 18, marginTop: 15, marginBottom: 16}, transaction: {flexDirection: 'row', alignItems: 'center', marginTop: 9, padding: 13}, transIcon: {width: 38, height: 38, borderRadius: 13, alignItems: 'center', justifyContent: 'center'}, transInfo: {flex: 1, marginLeft: 11}, transDate: {fontSize: 11, marginTop: 3}, transAmount: {fontSize: 14}});
+const styles = StyleSheet.create({safe: {flex: 1}, page: {paddingHorizontal: 20, paddingTop: 12, paddingBottom: 32, width: '100%', maxWidth: 760, alignSelf: 'center'}, balance: {padding: 22}, amount: {fontSize: 35, marginTop: 8}, caption: {marginTop: 6}, heading: {fontSize: 19, marginTop: 25}, subtitle: {fontSize: 13, marginTop: 4}, presets: {flexDirection: 'row', flexWrap: 'wrap', gap: 10, marginTop: 15}, preset: {width: '47%', paddingVertical: 15, textAlign: 'center', overflow: 'hidden', borderRadius: 14, borderWidth: 1, fontWeight: '700'}, disclaimer: {fontSize: 12, lineHeight: 18, marginTop: 15, marginBottom: 16}, transaction: {flexDirection: 'row', alignItems: 'center', marginTop: 9, padding: 14}, transIcon: {width: 42, height: 42, borderRadius: 14, alignItems: 'center', justifyContent: 'center'}, transSign: {fontSize: 18}, transInfo: {flex: 1, marginLeft: 12}, transMeta: {flexDirection: 'row', alignItems: 'center', gap: 8, marginTop: 5}, statusPill: {borderRadius: 8, paddingHorizontal: 7, paddingVertical: 3, borderWidth: StyleSheet.hairlineWidth}, statusText: {fontSize: 9, letterSpacing: 0.4}, transDate: {fontSize: 11}, transAmount: {fontSize: 14}});

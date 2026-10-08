@@ -1,6 +1,7 @@
 import {demoUser} from '../mock/users';
 import {User} from '../types';
 import * as Keychain from 'react-native-keychain';
+import {Buffer} from 'buffer';
 const credentialService = (email: string) => `com.astroanjan.mock-auth.${email.trim().toLowerCase()}`;
 
 export const signInWithMockAccount = (email: string): User => ({...demoUser, email: email.trim() || demoUser.email});
@@ -15,7 +16,15 @@ export const validateMockPassword = async (email: string, password: string): Pro
   if (!cleanEmail || !password) return false;
   const service = credentialService(cleanEmail);
   const existing = await Keychain.getGenericPassword({service});
-  if (existing) return existing.username.toLowerCase() === cleanEmail.toLowerCase() && existing.password === password;
+  if (existing) {
+    const storedUser = Buffer.from(existing.username.toLowerCase());
+    const inputUser = Buffer.from(cleanEmail.toLowerCase());
+    const storedPass = Buffer.from(existing.password);
+    const inputPass = Buffer.from(password);
+    const userMatch = storedUser.length === inputUser.length && storedUser.every((b, i) => b === inputUser[i]);
+    const passMatch = storedPass.length === inputPass.length && storedPass.every((b, i) => b === inputPass[i]);
+    return userMatch && passMatch;
+  }
   return Boolean(await Keychain.setGenericPassword(cleanEmail, password, {service}));
 };
 export const verifyMockPhone = (phone: string, code: string): User | null => code === '123456' ? {...demoUser, phone: phone.trim() || demoUser.phone} : null;
